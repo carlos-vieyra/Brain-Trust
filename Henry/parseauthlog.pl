@@ -22,10 +22,9 @@ my @logrecords;
 ################################################################################
 # Parse lines from logfile, discarding service checks, stunnel messages, 
 # selinux setcon errors, publickey and sftp notices.
-# Store lines in an indexed array so references can be removed/overwritten
+# Store lines in an array so references can be removed/overwritten
 # for /etc/passwd user failures when they succeed with sssd (ipa). Array 
-# indices will be stored in a hash table with pid for sshd failures for 
-# backreferencing.
+# indices are skipped if defined as 'undef'.
 ################################################################################
 foreach $argnum (0...$#ARGV) {
 	open(my $fh, "<", $ARGV[$argnum]) or die "cannot open < $ARGV[$argnum]: $!";
