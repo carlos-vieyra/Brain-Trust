@@ -29,7 +29,7 @@ my @logrecords;
 foreach $argnum (0...$#ARGV) {
 	open(my $fh, "<", $ARGV[$argnum]) or die "cannot open < $ARGV[$argnum]: $!";
 	my $i = 0;
-	while(<$fh>){
+	while(<$fh>) {
 		chomp;
 		next if /ssh_selinux_change_context: setcon failed with Invalid argument/;
 		next if /Received disconnect from .+ disconnected by user/;
