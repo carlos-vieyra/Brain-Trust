@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 while read -r cve
     do
         curl https://access.redhat.com/security/cve/$cve > $cve
