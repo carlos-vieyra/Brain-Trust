@@ -106,11 +106,11 @@ with open(host + ".ldif", "w") as ld:
 	ld.write("objectClass: organizationalUnit \n")
 	ld.write("\n\n")
 
-#for key in passwd:
-#	if len(passwd[[key],4]) == 0:
-#		passwd[key[4]] = key
-#	name = re.split(' ', passwd.get([key],[4]))
-	ld.write("dn: cn=" + key + ", ou=Users," + "".join(str(x) for x in dc2) + "dc=" + dc1 + "\n" )
+'''for key in passwd:
+	if len(passwd[[key],4]) == 0:
+		passwd[key[4]] = key
+	name = re.split(' ', passwd.get([key],[4]))
+	ld.write("dn: cn=" + #key + ", ou=Users," + "".join(str(x) for x in dc2) + "dc=" + dc1 + "\n" )
 	ld.write("cn:" ) #+ passwd[key[4]] + "\n")
 	ld.write("givenName: ") # + #name[0] + "\n")
 	ld.write("sn: " ) #name[0] + "\n")
@@ -135,6 +135,6 @@ with open(host + ".ldif", "w") as ld:
 	ld.write("objectClass: groupOfNames \n")
 	#members = re.split(',',group key)
 	#for member in members:
-		ld.write("member: cn= ")# member dc)
+	#	ld.write("member: cn= ")# member dc)
 	ld.write("\n\n")
-
+'''
