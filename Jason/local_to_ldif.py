@@ -17,9 +17,10 @@ if fqdn[-1] == 0 or fqdn[1] == 'localdomain':
 		fqdn = re.split('\W+', userinput)
 
 domain = fqdn[1]
-#convertlisttostring = "".join(str(x) for x in fqdn[1:2])
-dc = "dc=" + domain
+convertlisttostring = "".join(str(x) for x in fqdn[1:])
+#convertlisttostring2 = "".join(str(x) for x in fqdn[2:3])
+dc = "dc=" + convertlisttostring
 host = fqdn[0]
 
-print "Using " + host + "  as Hostname. Output will be in " + host +  ".ldif \n"
+print "Using " + host + " as Hostname. Output will be in " + host +  ".ldif \n"
 print "Using " + dc + " as LDAP suffix. \n"
