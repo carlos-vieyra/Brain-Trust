@@ -110,3 +110,31 @@ with open(host + ".ldif", "w") as ld:
 #	if len(passwd[[key],4]) == 0:
 #		passwd[key[4]] = key
 #	name = re.split(' ', passwd.get([key],[4]))
+	ld.write("dn: cn=" + key + ", ou=Users," + "".join(str(x) for x in dc2) + "dc=" + dc1 + "\n" )
+	ld.write("cn:" ) #+ passwd[key[4]] + "\n")
+	ld.write("givenName: ") # + #name[0] + "\n")
+	ld.write("sn: " ) #name[0] + "\n")
+	ld.write("uid: ") # key + "\n")
+	ld.write("uidNumber: ") # + passwd "\n")
+	ld.write("homeDirectory" ) # + passwd + "\n")
+	ld.write("loginShell: " ) # passwd + "\n")
+	ld.write("ObjectClass: top \n")
+	ld.write("ObjectClass: shadowAccount \n")
+	ld.write("ObjectClass: posixAccount \n")
+	ld.write("userPassword: ") # passwd + "\n" )
+	ld.write("shadowLastChange: ") # shadow + "\n")
+	ld.write("shadowMin") # + shadow + "\n")
+	ld.write("shadowMax") # + shadow + "\n")
+	ld.write("shadowWarning:") # + shadow + )
+	ld.write("\n\n")
+
+#for key in group:
+	ld.write("dn: ") #key + "\n")
+	ld.write("cn: ") #key + "\n")
+	ld.write("objectClass: top \n")
+	ld.write("objectClass: groupOfNames \n")
+	#members = re.split(',',group key)
+	#for member in members:
+		ld.write("member: cn= ")# member dc)
+	ld.write("\n\n")
+
