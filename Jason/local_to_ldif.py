@@ -39,18 +39,30 @@ except IOError:
 
 with open("/etc/shadow", "r") as sf:
 	for line in sf:
-		line.rstrip() 
 		s = []
+		line.rstrip()
+		if line == re.split('/^\s*#/', line):
+			pass 
 		s.extend(re.split(':', line))
 		if s[1] != '!!' and s[1] != '*':
 			shadow[s[0]] = s
-			print shadow
+
 try:
         open("/etc/passwd", "r")
 except IOError:
         print("Opening passwd failed")        
 	quit()
 
+with open("/etc/passwd", "r") as pw:
+        for line in pw:
+                p = []
+		line.rstrip()
+   		if line == re.split('/^\s*#/', line):
+                        pass
+                p.extend(re.split(':', line))
+                if p[0] not in shadow and p[2] >= 100:
+                        passwd[p[0]] = p
+			#passwd[p[0]][1] = shadow[p[0]][1]
 
 try:
         open("/etc/group", "r")
@@ -58,9 +70,21 @@ except IOError:
         print("Opening group failed")        
 	quit()
 
+with open("/etc/group", "r") as gp:
+        for line in gp:
+                g = []
+                line.rstrip()
+                if line == re.split('/^\s*#/', line):
+                        pass
+                g.extend(re.split(':', line))
+                if [3] in g and g[2] >= 100:
+                        group[g[0]] = g
+ 
+
 try:
         open(host +'.ldif', "w")
 except IOError:
         print("Opening ldif failed")
 	quit()
 
+ 
