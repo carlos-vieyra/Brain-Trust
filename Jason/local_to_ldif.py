@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-import socket
-import os
-import re
+import socket, re, os
 
 fqdn = re.split('\W+', socket.gethostname())
 
@@ -57,9 +55,9 @@ with open("/etc/passwd", "r") as pw:
                 p.extend(re.split(':', line))
                 if p[0] not in shadow and p[2] >= 100:
                         passwd[p[0]] = p
-			#passwd[p[0],1] = shadow[p[0],1]
+			passwd[p[0]][1] = shadow.get(p[0],[1])
 try:
-        open("/etc/group", "r")
+        open("/etc/passwd", "r")
 except IOError:
         print("Opening group failed")        
 	quit()
@@ -94,34 +92,35 @@ with open(host + ".ldif", "w") as ld:
 	ld.write("objectClass: top \n")
 	ld.write("objectClass: organizationalUnit \n")
 	ld.write("\n\n")
-'''for key in passwd:
-	if len(passwd[[key],4]) == 0:
-		passwd[key[4]] = key
-	name = re.split(' ', passwd.get([key],[4]))
-	ld.write("dn: cn=" + #key + ", ou=Users," + "".join(str(x) for x in dc2) + "dc=" + dc1 + "\n" )
-	ld.write("cn:" ) #+ passwd[key[4]] + "\n")
-	ld.write("givenName: ") # + #name[0] + "\n")
-	ld.write("sn: " ) #name[0] + "\n")
-	ld.write("uid: ") # key + "\n")
-	ld.write("uidNumber: ") # + passwd "\n")
-	ld.write("homeDirectory" ) # + passwd + "\n")
-	ld.write("loginShell: " ) # passwd + "\n")
-	ld.write("ObjectClass: top \n")
-	ld.write("ObjectClass: shadowAccount \n")
-	ld.write("ObjectClass: posixAccount \n")
-	ld.write("userPassword: ") # passwd + "\n" )
-	ld.write("shadowLastChange: ") # shadow + "\n")
-	ld.write("shadowMin") # + shadow + "\n")
-	ld.write("shadowMax") # + shadow + "\n")
-	ld.write("shadowWarning:") # + shadow + )
-	ld.write("\n\n")
-#for key in group:
-	ld.write("dn: ") #key + "\n")
-	ld.write("cn: ") #key + "\n")
-	ld.write("objectClass: top \n")
-	ld.write("objectClass: groupOfNames \n")
-	#members = re.split(',',group key)
-	#for member in members:
-	#	ld.write("member: cn= ")# member dc)
-	ld.write("\n\n")
-'''
+
+	for key in passwd:
+		if len(passwd.get(key,4)) == 0:
+			passwd[key,4] = key
+		name = re.split(' ', passwd[key][4])
+		ld.write("dn: cn=" + key + ", ou=Users," + "".join(str(x) for x in dc2) + "dc=" + dc1 + "\n")
+		ld.write("cn:" + passwd[key][4] + "\n")
+		ld.write("givenName:"  + name[0] + "\n")
+		ld.write("sn: "  + name[-1] + "\n")
+		ld.write("uid: " +  key + "\n")
+		ld.write("uidNumber: " + passwd[key][2] + "\n")
+		ld.write("homeDirectory"  + passwd[key][5] + "\n")
+		ld.write("loginShell: "  + passwd[key][6] + "\n")
+		ld.write("ObjectClass: top \n")
+		ld.write("ObjectClass: shadowAccount \n")
+		ld.write("ObjectClass: posixAccount \n")
+		ld.write("userPassword: " + "".join(str(x) for x in passwd[key][1]) + "\n" )
+		ld.write("shadowLastChange: " + "".join(str(x) for x in shadow.get(key,[2])) + "\n")
+		ld.write("shadowMin" + "".join(str(x) for x in shadow.get(key,[3])) + "\n")
+		ld.write("shadowMax" + "".join(str(x) for x in shadow.get(key,[4])) + "\n")
+		ld.write("shadowWarning:" + "".join(str(x) for x in shadow.get(key,[5])) + "\n")
+		ld.write("\n\n")
+	for key in group:
+		ld.write("dn: " + key + "\n")
+		ld.write("cn: " + key + "\n")
+		ld.write("objectClass: top \n")
+		ld.write("objectClass: groupOfNames \n")
+		members = re.split(',',group[key][3])
+		for member in members:
+			ld.write("member: cn=" + member + "ou=Users" + "".join(str(x) for x in dc2) + dc1 + "\n")
+		ld.write("\n\n")
+
