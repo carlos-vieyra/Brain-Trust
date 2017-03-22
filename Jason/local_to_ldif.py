@@ -71,7 +71,7 @@ with open("/etc/group", "r") as gp:
                 g.extend(re.split(':', line))
                 if [3] in g and g[2] >= 100:
                         group[g[0]] = g
-print group
+			
 try:
         open(host + ".ldif", "w")
 except IOError:
