@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import socket, re, os
+import socket, re, os, crypt
 
 fqdn = re.split('\W+', socket.gethostname())
 
@@ -41,6 +41,7 @@ with open("/etc/shadow", "r") as sf:
 		s.extend(re.split(':', line))
 		if s[1] != '!!' and s[1] != '*':
 			shadow[s[0]] = s
+
 try:
         open("/etc/passwd", "r")
 except IOError:
@@ -57,7 +58,7 @@ with open("/etc/passwd", "r") as pw:
                         passwd[p[0]] = p
 			passwd[p[0]][1] = shadow.get(p[0],[1])
 try:
-        open("/etc/passwd", "r")
+        open("/etc/group", "r")
 except IOError:
         print("Opening group failed")        
 	quit()
@@ -70,6 +71,7 @@ with open("/etc/group", "r") as gp:
                 g.extend(re.split(':', line))
                 if [3] in g and g[2] >= 100:
                         group[g[0]] = g
+print group
 try:
         open(host + ".ldif", "w")
 except IOError:
@@ -108,13 +110,13 @@ with open(host + ".ldif", "w") as ld:
 		ld.write("ObjectClass: top \n")
 		ld.write("ObjectClass: shadowAccount \n")
 		ld.write("ObjectClass: posixAccount \n")
-		ld.write("userPassword: " + "".join(str(x) for x in passwd[key][1]) + "\n" )
-		ld.write("shadowLastChange: " + "".join(str(x) for x in shadow.get(key,[2])) + "\n")
-		ld.write("shadowMin" + "".join(str(x) for x in shadow.get(key,[3])) + "\n")
-		ld.write("shadowMax" + "".join(str(x) for x in shadow.get(key,[4])) + "\n")
-		ld.write("shadowWarning:" + "".join(str(x) for x in shadow.get(key,[5])) + "\n")
+		ld.write("userPassword: " + crypt.crypt("".join(str(x) for x in passwd[key][1])) + "\n" )
+		ld.write("shadowLastChange: " + "".join(str(x) for x in [shadow.get(key,2)]) + "\n")
+		ld.write("shadowMin: " + "".join(str(x) for x in [shadow.get(key,3)]) + "\n")
+		ld.write("shadowMax: " + "".join(str(x) for x in [shadow.get(key,4)]) + "\n")
+		ld.write("shadowWarning: " + "".join(str(x) for x in [shadow.get(key,5)]) + "\n")
 		ld.write("\n\n")
-	for key in group:
+	for i in group:
 		ld.write("dn: " + key + "\n")
 		ld.write("cn: " + key + "\n")
 		ld.write("objectClass: top \n")
